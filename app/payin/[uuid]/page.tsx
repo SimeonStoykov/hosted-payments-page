@@ -1,12 +1,21 @@
 'use client';
 
+import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useQuoteSummary } from '../../hooks/useQuote';
 import { Card } from '../../components/ui/Card';
+import {
+  CurrencySelector,
+  CurrencyCode,
+} from '../../components/CurrencySelector';
 
 export default function AcceptQuotePage() {
   const params = useParams();
   const uuid = params.uuid as string;
+
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode | ''>(
+    '',
+  );
 
   // TanStack Query hooks
   const { data: quote, isLoading, error } = useQuoteSummary(uuid);
@@ -56,6 +65,11 @@ export default function AcceptQuotePage() {
               {quote.reference}
             </span>
           </p>
+
+          <CurrencySelector
+            selectedCurrency={selectedCurrency}
+            onCurrencyChange={(currency) => setSelectedCurrency(currency)}
+          />
         </div>
       </Card>
     </div>
