@@ -1,3 +1,8 @@
+export interface CurrencyOption {
+  code: string;
+  protocols: string[];
+}
+
 export interface Quote {
   uuid: string;
   merchantDisplayName: string;
@@ -15,6 +20,7 @@ export interface Quote {
   walletCurrency: CurrencyAmount;
   paidCurrency: CurrencyAmount;
   feeCurrency: CurrencyAmount;
+  networkFeeCurrency: CurrencyAmount;
   displayRate: ExchangeRate | null;
   exchangeRate: ExchangeRate | null;
   address: CryptoAddress | null;
@@ -23,6 +29,15 @@ export interface Quote {
   transactions: unknown[];
   refund: unknown | null;
   refunds: unknown[];
+  currencyOptions: CurrencyOption[] | null;
+  flow: string | null;
+  twoStep: boolean;
+  pegged: boolean;
+  customerId: string;
+  networkFeeBilledTo: string;
+  processingFeeBilledTo: string;
+  networkFeeRates: unknown[];
+  walletId: string;
 }
 
 export interface CurrencyAmount {

@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useQuoteSummary } from '../../hooks/useQuote';
+import { useQuoteSummary, useUpdateQuoteCurrency } from '../../hooks/useQuote';
+import { useCountdown } from '../../hooks/useCountdown';
 import { Card } from '../../components/ui/Card';
 import {
   CurrencySelector,
@@ -19,6 +20,14 @@ export default function AcceptQuotePage() {
 
   // TanStack Query hooks
   const { data: quote, isLoading, error } = useQuoteSummary(uuid);
+  const updateCurrencyMutation = useUpdateQuoteCurrency(uuid);
+
+  const { timeLeft, isExpired } = useCountdown(quote?.acceptanceExpiryDate);
+
+  const handleCurrencyChange = (currency: CurrencyCode) => {
+    setSelectedCurrency(currency);
+    updateCurrencyMutation.mutate(currency);
+  };
 
   if (isLoading) {
     return (
@@ -68,8 +77,44 @@ export default function AcceptQuotePage() {
 
           <CurrencySelector
             selectedCurrency={selectedCurrency}
-            onCurrencyChange={(currency) => setSelectedCurrency(currency)}
+            onCurrencyChange={handleCurrencyChange}
           />
+
+          {/* Payment Details - Show only when currency is selected */}
+          {selectedCurrency && (
+            <div className="w-full space-y-4 pt-2 border-t border-gray-200">
+              {/* Amount Due */}
+              <div className="text-left">
+                <p className="text-sm font-medium text-gray-700">
+                  Amount due:{' '}
+                  {updateCurrencyMutation.isPending ? (
+                    <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full align-middle ml-2"></span>
+                  ) : (
+                    <span className="text-2xl font-bold text-gray-900">
+                      {quote.paidCurrency.amount}{' '}
+                      <span className="text-lg font-medium text-gray-500">
+                        {quote.paidCurrency.currency}
+                      </span>
+                    </span>
+                  )}
+                </p>
+              </div>
+
+              {/* Quote Expiration Timer */}
+              <div className="text-left">
+                <p className="text-sm font-medium text-gray-700">
+                  Quoted price expires in:{' '}
+                  {updateCurrencyMutation.isPending ? (
+                    <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full align-middle ml-2"></span>
+                  ) : quote.acceptanceExpiryDate && !isExpired ? (
+                    <span className="text-2xl font-bold text-red-600 font-mono">
+                      {timeLeft}
+                    </span>
+                  ) : null}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </Card>
     </div>
