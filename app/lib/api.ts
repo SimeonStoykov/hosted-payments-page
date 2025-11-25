@@ -66,7 +66,7 @@ export async function fetchQuoteSummary(uuid: string): Promise<Quote> {
   return handleResponse<Quote>(res);
 }
 
-export async function updateQuoteSummary(
+export async function updateQuoteCurrency(
   uuid: string,
   currency: string,
 ): Promise<Quote> {
@@ -79,6 +79,16 @@ export async function updateQuoteSummary(
       currency,
       payInMethod: 'crypto',
     }),
+  });
+  return handleResponse<Quote>(res);
+}
+
+export async function refreshQuoteSummary(uuid: string): Promise<Quote> {
+  const res = await fetch(`${API_URL}/pay/${uuid}/summary`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
   return handleResponse<Quote>(res);
 }
