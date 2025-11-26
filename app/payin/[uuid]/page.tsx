@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useQuoteSummary, useUpdateQuoteCurrency } from '../../hooks/useQuote';
 import { useCountdown } from '../../hooks/useCountdown';
@@ -23,6 +23,15 @@ export default function AcceptQuotePage() {
   const updateCurrencyMutation = useUpdateQuoteCurrency(uuid);
 
   const { timeLeft, isExpired } = useCountdown(quote?.acceptanceExpiryDate);
+
+  // Auto-refresh when timer expires by calling update currency mutation
+  useEffect(() => {
+    if (isExpired && selectedCurrency) {
+      updateCurrencyMutation.mutate(selectedCurrency);
+    }
+    // Only depend on isExpired and selectedCurrency to avoid double requests
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExpired, selectedCurrency]);
 
   const handleCurrencyChange = (currency: CurrencyCode) => {
     setSelectedCurrency(currency);

@@ -2,7 +2,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchQuoteSummary,
   updateQuoteCurrency,
-  refreshQuoteSummary,
   acceptQuote,
 } from '../lib/api';
 
@@ -29,21 +28,6 @@ export function useUpdateQuoteCurrency(uuid: string) {
     mutationFn: (currency: string) => updateQuoteCurrency(uuid, currency),
     onSuccess: (data) => {
       // Update the cache with the new quote data
-      queryClient.setQueryData(QUOTE_QUERY_KEY(uuid), data);
-    },
-  });
-}
-
-/**
- * Hook to manually refresh quote data (for timer refresh)
- */
-export function useRefreshQuoteSummary(uuid: string) {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: () => refreshQuoteSummary(uuid),
-    onSuccess: (data) => {
-      // Update the cache with the refreshed quote data
       queryClient.setQueryData(QUOTE_QUERY_KEY(uuid), data);
     },
   });

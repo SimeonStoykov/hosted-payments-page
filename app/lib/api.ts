@@ -98,16 +98,6 @@ export async function updateQuoteCurrency(
   return handleResponse<Quote>(res);
 }
 
-export async function refreshQuoteSummary(uuid: string): Promise<Quote> {
-  const res = await fetch(`${API_URL}/pay/${uuid}/summary`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return handleResponse<Quote>(res);
-}
-
 export async function acceptQuote(uuid: string): Promise<Quote> {
   const res = await fetch(`${API_URL}/pay/${uuid}/accept/summary`, {
     method: 'PUT',
