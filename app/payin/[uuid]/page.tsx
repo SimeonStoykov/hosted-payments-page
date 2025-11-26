@@ -30,6 +30,13 @@ export default function AcceptQuotePage() {
 
   const { timeLeft, isExpired } = useCountdown(quote?.acceptanceExpiryDate);
 
+  // Handle expiration redirect
+  useEffect(() => {
+    if (quote?.status === 'EXPIRED') {
+      router.replace(`/payin/${uuid}/expired`);
+    }
+  }, [quote, router, uuid]);
+
   // Auto-refresh when timer expires by calling update currency mutation
   useEffect(() => {
     if (isExpired && selectedCurrency) {
@@ -52,7 +59,7 @@ export default function AcceptQuotePage() {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || quote?.status === 'EXPIRED') {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -73,7 +80,7 @@ export default function AcceptQuotePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-      <Card className="w-full max-w-md" title="">
+      <Card className="w-full max-w-md">
         <div className="flex flex-col items-center text-center space-y-6 pt-4">
           {/* Merchant Name */}
           <h2 className="text-xl font-semibold text-gray-900">
