@@ -1,8 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { useQuoteSummary, useUpdateQuoteCurrency } from '../../hooks/useQuote';
+import { useParams, useRouter } from 'next/navigation';
+import {
+  useQuoteSummary,
+  useUpdateQuoteCurrency,
+  useAcceptQuote,
+} from '../../hooks/useQuote';
 import { useCountdown } from '../../hooks/useCountdown';
 import { Card } from '../../components/ui/Card';
 import {
@@ -13,6 +17,7 @@ import {
 export default function AcceptQuotePage() {
   const params = useParams();
   const uuid = params.uuid as string;
+  const router = useRouter();
 
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode | ''>(
     '',
@@ -21,6 +26,7 @@ export default function AcceptQuotePage() {
   // TanStack Query hooks
   const { data: quote, isLoading, error } = useQuoteSummary(uuid);
   const updateCurrencyMutation = useUpdateQuoteCurrency(uuid);
+  const acceptQuoteMutation = useAcceptQuote(uuid);
 
   const { timeLeft, isExpired } = useCountdown(quote?.acceptanceExpiryDate);
 
@@ -36,6 +42,14 @@ export default function AcceptQuotePage() {
   const handleCurrencyChange = (currency: CurrencyCode) => {
     setSelectedCurrency(currency);
     updateCurrencyMutation.mutate(currency);
+  };
+
+  const handleConfirm = () => {
+    acceptQuoteMutation.mutate(undefined, {
+      onSuccess: () => {
+        router.replace(`/payin/${uuid}/pay`);
+      },
+    });
   };
 
   if (isLoading) {
@@ -94,10 +108,10 @@ export default function AcceptQuotePage() {
             <div className="w-full space-y-4 pt-2 border-t border-gray-200">
               {/* Amount Due */}
               <div className="text-left">
-                <p className="text-sm font-medium text-gray-700">
-                  Amount due:{' '}
+                <p className="text-sm font-medium text-gray-700 min-h-8 flex items-center justify-between">
+                  <span>Amount due</span>
                   {updateCurrencyMutation.isPending ? (
-                    <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full align-middle ml-2"></span>
+                    <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></span>
                   ) : (
                     <span className="text-2xl font-bold text-gray-900">
                       {quote.paidCurrency.amount}{' '}
@@ -111,10 +125,10 @@ export default function AcceptQuotePage() {
 
               {/* Quote Expiration Timer */}
               <div className="text-left">
-                <p className="text-sm font-medium text-gray-700">
-                  Quoted price expires in:{' '}
+                <p className="text-sm font-medium text-gray-700 min-h-8 flex items-center justify-between">
+                  <span>Quoted price expires in</span>
                   {updateCurrencyMutation.isPending ? (
-                    <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full align-middle ml-2"></span>
+                    <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></span>
                   ) : quote.acceptanceExpiryDate && !isExpired ? (
                     <span className="text-2xl font-bold text-red-600 font-mono">
                       {timeLeft}
@@ -122,6 +136,19 @@ export default function AcceptQuotePage() {
                   ) : null}
                 </p>
               </div>
+
+              {/* Confirm Button */}
+              <button
+                type="button"
+                onClick={handleConfirm}
+                disabled={
+                  updateCurrencyMutation.isPending ||
+                  acceptQuoteMutation.isPending
+                }
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+              >
+                {acceptQuoteMutation.isPending ? 'Processing...' : 'Confirm'}
+              </button>
             </div>
           )}
         </div>
