@@ -79,7 +79,7 @@ export default function AcceptQuotePage() {
       className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
       style={{ backgroundColor: '#EBEDF3' }}
     >
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md" contentClassName="py-[25px] px-[22px]">
         <div className="flex flex-col items-center text-center space-y-6 pt-4">
           {/* Merchant Name */}
           <h2 className="text-xl font-semibold text-gray-900">

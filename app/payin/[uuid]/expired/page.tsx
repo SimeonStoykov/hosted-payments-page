@@ -1,9 +1,33 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Card } from '../../../components/ui/Card';
+import { useQuoteSummary } from '../../../hooks/useQuote';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 export default function ExpiredPage() {
+  const params = useParams();
+  const router = useRouter();
+  const uuid = params.uuid as string;
+
+  const { data: quote, isLoading } = useQuoteSummary(uuid);
+
+  useEffect(() => {
+    if (!isLoading && quote && quote.status !== 'EXPIRED') {
+      // If quote is accepted, go to pay, otherwise go to accept page
+      if (quote.quoteStatus === 'ACCEPTED') {
+        router.replace(`/payin/${uuid}/pay`);
+      } else {
+        router.replace(`/payin/${uuid}`);
+      }
+    }
+  }, [quote, isLoading, router, uuid]);
+
+  if (isLoading || quote?.status !== 'EXPIRED') {
+    return <LoadingSpinner />;
+  }
   return (
     <div
       className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
