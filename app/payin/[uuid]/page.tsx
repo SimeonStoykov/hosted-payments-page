@@ -22,7 +22,6 @@ export default function AcceptQuotePage() {
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode | ''>(
     '',
   );
-
   // TanStack Query hooks
   const { data: quote, isLoading, error } = useQuoteSummary(uuid);
   const updateCurrencyMutation = useUpdateQuoteCurrency(uuid);
@@ -34,6 +33,8 @@ export default function AcceptQuotePage() {
   useEffect(() => {
     if (quote?.status === 'EXPIRED') {
       router.replace(`/payin/${uuid}/expired`);
+    } else if (quote?.quoteStatus === 'ACCEPTED') {
+      router.replace(`/payin/${uuid}/pay`);
     }
   }, [quote, router, uuid]);
 
@@ -59,7 +60,11 @@ export default function AcceptQuotePage() {
     });
   };
 
-  if (isLoading || quote?.status === 'EXPIRED') {
+  if (
+    isLoading ||
+    quote?.status === 'EXPIRED' ||
+    quote?.quoteStatus === 'ACCEPTED'
+  ) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>

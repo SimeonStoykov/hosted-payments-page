@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
 import { Quote } from '../lib/api';
 
 interface CountdownResult {
@@ -12,7 +12,7 @@ export function useCountdown(
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [isExpired, setIsExpired] = useState<boolean>(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!expiryTimestamp) {
       return;
     }

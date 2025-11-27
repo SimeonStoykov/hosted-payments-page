@@ -15,6 +15,7 @@ export function useQuoteSummary(uuid: string) {
     queryKey: QUOTE_QUERY_KEY(uuid),
     queryFn: () => fetchQuoteSummary(uuid),
     enabled: Boolean(uuid),
+    staleTime: 10000, // 10 seconds
   });
 }
 
