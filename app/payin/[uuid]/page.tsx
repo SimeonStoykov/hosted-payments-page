@@ -9,6 +9,8 @@ import {
 } from '../../hooks/useQuote';
 import { useCountdown } from '../../hooks/useCountdown';
 import { Card } from '../../components/ui/Card';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { ErrorMessage } from '../../components/ErrorMessage';
 import {
   CurrencySelector,
   CurrencyCode,
@@ -65,28 +67,11 @@ export default function AcceptQuotePage() {
     quote?.status === 'EXPIRED' ||
     quote?.quoteStatus === 'ACCEPTED'
   ) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: '#EBEDF3' }}
-      >
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error || !quote) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: '#EBEDF3' }}
-      >
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Error</h1>
-          <p className="text-gray-600">Failed to load quote details.</p>
-        </div>
-      </div>
-    );
+    return <ErrorMessage message="Failed to load quote details." />;
   }
 
   return (

@@ -6,6 +6,8 @@ import QRCode from 'react-qr-code';
 import { useQuoteSummary } from '../../../hooks/useQuote';
 import { useCountdown } from '../../../hooks/useCountdown';
 import { Card } from '../../../components/ui/Card';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { ErrorMessage } from '../../../components/ErrorMessage';
 
 export default function PayQuotePage() {
   const params = useParams();
@@ -35,28 +37,11 @@ export default function PayQuotePage() {
   };
 
   if (isLoading || quote?.status === 'EXPIRED' || isExpired) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: '#EBEDF3' }}
-      >
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error || !quote || !quote.address) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: '#EBEDF3' }}
-      >
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Error</h1>
-          <p className="text-gray-600">Invalid payment details.</p>
-        </div>
-      </div>
-    );
+    return <ErrorMessage message="Invalid payment details." />;
   }
 
   return (
@@ -68,13 +53,13 @@ export default function PayQuotePage() {
         <div className="space-y-6">
           {/* Pay with Currency */}
           <div className="text-center">
-            <p className="text-sm text-gray-500 mb-1">
+            <p className="text-xl" style={{ color: '#0A1628' }}>
               Pay with {quote.paidCurrency.currency}
             </p>
           </div>
 
           {/* Instruction Text */}
-          <p className="text-sm text-gray-600 text-center">
+          <p className="text-sm leading-[22px] text-gray-600 text-center mt-[25px]">
             To complete this payment send the amount due to the{' '}
             {quote.paidCurrency.currency} address provided below.
           </p>
