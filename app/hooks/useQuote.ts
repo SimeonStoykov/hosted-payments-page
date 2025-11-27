@@ -15,6 +15,11 @@ interface ApiErrorResponse {
   message: string;
 }
 
+interface AcceptQuoteErrorResponse {
+  requestId: string;
+  errorList: ApiErrorResponse[];
+}
+
 interface ApiError extends Error {
   message: string;
 }
@@ -67,12 +72,32 @@ export function useUpdateQuoteCurrency(uuid: string) {
  */
 export function useAcceptQuote(uuid: string) {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: () => acceptQuote(uuid),
     onSuccess: (data) => {
       // Update the cache with the accepted quote data
       queryClient.setQueryData(QUOTE_QUERY_KEY(uuid), data);
+    },
+    onError: (error: ApiError) => {
+      // Check if the error is due to expired payment
+      try {
+        const message = error?.message || '';
+        const jsonMatch = message.match(/\{.*\}/);
+        if (jsonMatch) {
+          const errorData: AcceptQuoteErrorResponse = JSON.parse(jsonMatch[0]);
+          // Check for MER-PAY-2004 in errorList
+          const hasExpiredError = errorData.errorList.some(
+            (err) => err.code === 'MER-PAY-2004',
+          );
+          if (hasExpiredError) {
+            router.replace(`/payin/${uuid}/expired`);
+          }
+        }
+      } catch {
+        // Ignore parsing errors
+      }
     },
   });
 }
