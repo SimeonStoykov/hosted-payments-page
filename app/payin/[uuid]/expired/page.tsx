@@ -5,7 +5,10 @@ import { Card } from '../../../components/ui/Card';
 
 export default function ExpiredPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div
+      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
+      style={{ backgroundColor: '#EBEDF3' }}
+    >
       <Card className="w-full max-w-md text-center py-12">
         <Image
           src="/icons/error.svg"

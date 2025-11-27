@@ -36,7 +36,10 @@ export default function PayQuotePage() {
 
   if (isLoading || quote?.status === 'EXPIRED' || isExpired) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: '#EBEDF3' }}
+      >
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -44,7 +47,10 @@ export default function PayQuotePage() {
 
   if (error || !quote || !quote.address) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ backgroundColor: '#EBEDF3' }}
+      >
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Error</h1>
           <p className="text-gray-600">Invalid payment details.</p>
@@ -54,7 +60,10 @@ export default function PayQuotePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div
+      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
+      style={{ backgroundColor: '#EBEDF3' }}
+    >
       <Card className="w-full max-w-md">
         <div className="space-y-6">
           {/* Pay with Currency */}
