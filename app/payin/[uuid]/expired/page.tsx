@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Card } from '../../../components/ui/Card';
+import { PaymentPageLayout } from '../../../components/PaymentPageLayout';
 import { useQuoteSummary } from '../../../hooks/useQuote';
 import { useCountdown } from '../../../hooks/useCountdown';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -31,25 +31,18 @@ export default function ExpiredPage() {
     return <LoadingSpinner />;
   }
   return (
-    <div
-      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
-      style={{ backgroundColor: '#EBEDF3' }}
-    >
-      <Card className="w-full max-w-md text-center px-[66px] pt-[77px] pb-[67px]">
-        <Image
-          src="/icons/error.svg"
-          alt="Payment details expired error"
-          width={48}
-          height={48}
-          className="mx-auto mb-5"
-        />
-        <h1 className="text-xl font-semibold mb-5 text-bvnk-black">
-          Payment details expired
-        </h1>
-        <p className="text-[15px] leading-[24px] text-bvnk-gray">
-          The payment details for your transaction have expired.
-        </p>
-      </Card>
-    </div>
+    <PaymentPageLayout contentClassName="text-center px-[66px] pt-[77px] pb-[67px]">
+      <Image
+        src="/icons/error.svg"
+        alt="Payment details expired error"
+        width={48}
+        height={48}
+        className="mx-auto mb-5"
+      />
+      <h1 className="text-xl font-semibold mb-5">Payment details expired</h1>
+      <p className="text-[15px] leading-[24px] text-bvnk-gray">
+        The payment details for your transaction have expired.
+      </p>
+    </PaymentPageLayout>
   );
 }

@@ -21,7 +21,7 @@ export function CurrencySelector({
     <div className="w-full space-y-2 text-left">
       <label
         htmlFor="currency-select"
-        className="block text-sm font-medium text-bvnk-black mb-1"
+        className="block text-sm font-medium mb-1"
       >
         Pay with
       </label>
