@@ -9,6 +9,7 @@ import { PaymentPageLayout } from '../../../components/PaymentPageLayout';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ErrorMessage } from '../../../components/ErrorMessage';
 import { PaymentStatus } from '../../../lib/constants';
+import { CopyButton } from '../../../components/CopyButton';
 
 export default function PayQuotePage() {
   const params = useParams();
@@ -60,61 +61,53 @@ export default function PayQuotePage() {
         </p>
 
         {/* Amount Due */}
-        <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-500">Amount due</span>
-            <div className="flex items-center space-x-2">
-              <span className="font-bold text-gray-900 font-mono">
-                {quote.paidCurrency.amount} {quote.paidCurrency.currency}
-              </span>
-              <button
-                onClick={() =>
-                  handleCopy(quote.paidCurrency.amount.toString(), 'amount')
-                }
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors"
-              >
-                {copiedField === 'amount' ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
+        <div className="flex justify-between items-center py-3 mb-0">
+          <span className="text-sm text-bvnk-gray leading-[22px]">
+            Amount due
+          </span>
+          <div className="flex items-center space-x-4">
+            <span className="font-medium text-sm leading-[22px]">
+              {quote.paidCurrency.amount} {quote.paidCurrency.currency}
+            </span>
+            <CopyButton
+              onClick={() =>
+                handleCopy(quote.paidCurrency.amount.toString(), 'amount')
+              }
+              isCopied={copiedField === 'amount'}
+            />
           </div>
         </div>
 
         {/* Address */}
-        <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-500">
-              {quote.paidCurrency.currency} Address
+        <div className="flex justify-between items-center py-3 mb-0">
+          <span className="text-sm leading-[22px] text-bvnk-gray">
+            {quote.paidCurrency.currency} address
+          </span>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm leading-[22px] font-medium">
+              {quote.address.address.slice(0, 7)}...
+              {quote.address.address.slice(-5)}
             </span>
-            <div className="flex items-center space-x-2">
-              <span className="font-mono text-gray-900">
-                {quote.address.address.slice(0, 7)}...
-                {quote.address.address.slice(-5)}
-              </span>
-              <button
-                onClick={() => handleCopy(quote.address!.address, 'address')}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors"
-              >
-                {copiedField === 'address' ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
+            <CopyButton
+              onClick={() => handleCopy(quote.address!.address, 'address')}
+              isCopied={copiedField === 'address'}
+            />
           </div>
         </div>
 
         {/* QR Code */}
-        <div className="flex flex-col items-center space-y-3">
-          <div className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+        <div className="flex flex-col items-center space-y-3 mb-3">
+          <div className="bg-white p-3 mb-0">
             <QRCode
               value={quote.address.uri || quote.address.address}
-              size={180}
+              size={140}
               level="M"
             />
           </div>
           {/* Full Address below QR */}
-          <div className="text-center">
-            <p className="font-mono text-xs text-gray-500 break-all px-4">
-              {quote.address.address}
-            </p>
-          </div>
+          <p className="text-xs break-all px-3 text-center text-bvnk-gray">
+            {quote.address.address}
+          </p>
         </div>
 
         {/* Timer */}
