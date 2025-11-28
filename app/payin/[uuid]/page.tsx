@@ -7,6 +7,7 @@ import {
   useUpdateQuoteCurrency,
   useAcceptQuote,
 } from '../../hooks/useQuote';
+import { isAcceptQuoteExpiredError } from '../../utils/errors';
 import { useCountdown } from '../../hooks/useCountdown';
 import { Card } from '../../components/ui/Card';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -54,10 +55,20 @@ export default function AcceptQuotePage() {
     updateCurrencyMutation.mutate(currency);
   };
 
+  const [isAcceptingQuote, setIsAcceptingQuote] = useState(false);
+
   const handleConfirm = () => {
+    setIsAcceptingQuote(true);
     acceptQuoteMutation.mutate(undefined, {
       onSuccess: () => {
         router.replace(`/payin/${uuid}/pay`);
+      },
+      onError: (error) => {
+        // If error is NOT expired, stop processing state (button re-enables)
+        // If it IS expired, keep processing state true (button stays disabled while hook redirects)
+        if (!isAcceptQuoteExpiredError(error)) {
+          setIsAcceptingQuote(false);
+        }
       },
     });
   };
@@ -147,13 +158,10 @@ export default function AcceptQuotePage() {
               <button
                 type="button"
                 onClick={handleConfirm}
-                disabled={
-                  updateCurrencyMutation.isPending ||
-                  acceptQuoteMutation.isPending
-                }
+                disabled={updateCurrencyMutation.isPending || isAcceptingQuote}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
               >
-                {acceptQuoteMutation.isPending ? 'Processing...' : 'Confirm'}
+                {isAcceptingQuote ? 'Processing...' : 'Confirm'}
               </button>
             </div>
           )}

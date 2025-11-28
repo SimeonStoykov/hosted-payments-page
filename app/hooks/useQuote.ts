@@ -6,23 +6,13 @@ import {
   acceptQuote,
 } from '../lib/api';
 
+import {
+  ApiError,
+  ApiErrorResponse,
+  isAcceptQuoteExpiredError,
+} from '../utils/errors';
+
 export const QUOTE_QUERY_KEY = (uuid: string) => ['quote', uuid];
-
-interface ApiErrorResponse {
-  requestId: string;
-  code: string;
-  parameter: string;
-  message: string;
-}
-
-interface AcceptQuoteErrorResponse {
-  requestId: string;
-  errorList: ApiErrorResponse[];
-}
-
-interface ApiError extends Error {
-  message: string;
-}
 
 /**
  * Hook to fetch quote summary data
@@ -82,21 +72,8 @@ export function useAcceptQuote(uuid: string) {
     },
     onError: (error: ApiError) => {
       // Check if the error is due to expired payment
-      try {
-        const message = error?.message || '';
-        const jsonMatch = message.match(/\{.*\}/);
-        if (jsonMatch) {
-          const errorData: AcceptQuoteErrorResponse = JSON.parse(jsonMatch[0]);
-          // Check for MER-PAY-2004 in errorList
-          const hasExpiredError = errorData.errorList.some(
-            (err) => err.code === 'MER-PAY-2004',
-          );
-          if (hasExpiredError) {
-            router.replace(`/payin/${uuid}/expired`);
-          }
-        }
-      } catch {
-        // Ignore parsing errors
+      if (isAcceptQuoteExpiredError(error)) {
+        router.replace(`/payin/${uuid}/expired`);
       }
     },
   });
