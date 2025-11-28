@@ -6,6 +6,7 @@
   /* Custom colors */
   --bvnk-black: #0a1628;
   --bvnk-gray: #556877;
+  --bvnk-blue: #3f53dd;
 
   --background: #ebedf3;
   --foreground: var(--bvnk-black);
@@ -16,6 +17,7 @@
   --color-foreground: var(--foreground);
 
   --color-bvnk-gray: var(--bvnk-gray);
+  --color-bvnk-blue: var(--bvnk-blue);
 }
 
 body {

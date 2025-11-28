@@ -49,14 +49,12 @@ export default function PayQuotePage() {
       <Card className="w-full max-w-md">
         <div className="space-y-6">
           {/* Pay with Currency */}
-          <div className="text-center">
-            <p className="text-xl text-bvnk-black">
-              Pay with {quote.paidCurrency.currency}
-            </p>
-          </div>
+          <h1 className="text-xl text-center font-medium mb-[25px]">
+            Pay with {quote.paidCurrency.currency}
+          </h1>
 
           {/* Instruction Text */}
-          <p className="text-sm leading-[22px] text-gray-600 text-center mt-[25px]">
+          <p className="text-sm leading-[22px] text-bvnk-gray text-center mb-[25px]">
             To complete this payment send the amount due to the{' '}
             {quote.paidCurrency.currency} address provided below.
           </p>

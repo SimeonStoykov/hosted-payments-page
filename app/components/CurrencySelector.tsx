@@ -18,7 +18,7 @@ export function CurrencySelector({
   onCurrencyChange,
 }: CurrencySelectorProps) {
   return (
-    <div className="w-full space-y-2 text-left mb-[25px]">
+    <div className="w-full space-y-2 text-left">
       <label
         htmlFor="currency-select"
         className="block text-sm font-medium text-bvnk-black mb-1"
