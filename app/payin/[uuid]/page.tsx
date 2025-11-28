@@ -30,25 +30,28 @@ export default function AcceptQuotePage() {
   const updateCurrencyMutation = useUpdateQuoteCurrency(uuid);
   const acceptQuoteMutation = useAcceptQuote(uuid);
 
-  const { timeLeft, isExpired } = useCountdown(quote?.acceptanceExpiryDate);
+  const { timeLeft, isExpired: isAcceptanceExpired } = useCountdown(
+    quote?.acceptanceExpiryDate,
+  );
+  const { isExpired: isQuoteExpired } = useCountdown(quote?.expiryDate);
 
-  // Handle expiration redirect
+  // Redirect based on quote status or expiry
   useEffect(() => {
-    if (quote?.status === 'EXPIRED') {
+    if (quote?.status === 'EXPIRED' || isQuoteExpired) {
       router.replace(`/payin/${uuid}/expired`);
     } else if (quote?.quoteStatus === 'ACCEPTED') {
       router.replace(`/payin/${uuid}/pay`);
     }
-  }, [quote?.status, quote?.quoteStatus, router, uuid]);
+  }, [quote?.status, quote?.quoteStatus, isQuoteExpired, router, uuid]);
 
   // Auto-refresh when timer expires by calling update currency mutation
   useEffect(() => {
-    if (isExpired && selectedCurrency) {
+    if (isAcceptanceExpired && selectedCurrency) {
       updateCurrencyMutation.mutate(selectedCurrency);
     }
-    // Only depend on isExpired and selectedCurrency to avoid double requests
+    // Only depend on isAcceptanceExpired and selectedCurrency to avoid double requests
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isExpired, selectedCurrency]);
+  }, [isAcceptanceExpired, selectedCurrency]);
 
   const handleCurrencyChange = (currency: CurrencyCode) => {
     setSelectedCurrency(currency);
@@ -76,6 +79,7 @@ export default function AcceptQuotePage() {
   if (
     isLoading ||
     quote?.status === 'EXPIRED' ||
+    isQuoteExpired ||
     quote?.quoteStatus === 'ACCEPTED'
   ) {
     return <LoadingSpinner />;
@@ -142,7 +146,7 @@ export default function AcceptQuotePage() {
                   </span>
                   {updateCurrencyMutation.isPending ? (
                     <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></span>
-                  ) : quote.acceptanceExpiryDate && !isExpired ? (
+                  ) : quote.acceptanceExpiryDate && !isAcceptanceExpired ? (
                     <span className="font-medium tabular-nums">{timeLeft}</span>
                   ) : null}
                 </p>
