@@ -11,6 +11,7 @@ import {
   ApiErrorResponse,
   isAcceptQuoteExpiredError,
 } from '../utils/errors';
+import { PaymentErrorCode } from '../lib/constants';
 
 export const QUOTE_QUERY_KEY = (uuid: string) => ['quote', uuid];
 
@@ -46,7 +47,7 @@ export function useUpdateQuoteCurrency(uuid: string) {
         const jsonMatch = message.match(/\{.*\}/);
         if (jsonMatch) {
           const errorData: ApiErrorResponse = JSON.parse(jsonMatch[0]);
-          if (errorData.code === 'MER-PAY-2017') {
+          if (errorData.code === PaymentErrorCode.QUOTE_EXPIRED_UPDATE) {
             router.replace(`/payin/${uuid}/expired`);
           }
         }

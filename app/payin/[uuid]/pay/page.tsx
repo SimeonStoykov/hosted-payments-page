@@ -8,6 +8,7 @@ import { useCountdown } from '../../../hooks/useCountdown';
 import { PaymentPageLayout } from '../../../components/PaymentPageLayout';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ErrorMessage } from '../../../components/ErrorMessage';
+import { PaymentStatus } from '../../../lib/constants';
 
 export default function PayQuotePage() {
   const params = useParams();
@@ -21,7 +22,7 @@ export default function PayQuotePage() {
 
   // Handle expiration redirect
   useEffect(() => {
-    if (quote?.status === 'EXPIRED' || isExpired) {
+    if (quote?.status === PaymentStatus.EXPIRED || isExpired) {
       router.replace(`/payin/${uuid}/expired`);
     }
   }, [isExpired, router, uuid, quote?.status]);
@@ -36,7 +37,7 @@ export default function PayQuotePage() {
     }
   };
 
-  if (isLoading || quote?.status === 'EXPIRED' || isExpired) {
+  if (isLoading || quote?.status === PaymentStatus.EXPIRED || isExpired) {
     return <LoadingSpinner />;
   }
 

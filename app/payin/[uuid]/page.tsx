@@ -16,6 +16,7 @@ import {
   CurrencySelector,
   CurrencyCode,
 } from '../../components/CurrencySelector';
+import { QuoteStatus, PaymentStatus } from '../../lib/constants';
 
 export default function AcceptQuotePage() {
   const params = useParams();
@@ -37,9 +38,9 @@ export default function AcceptQuotePage() {
 
   // Redirect based on quote status or expiry
   useEffect(() => {
-    if (quote?.status === 'EXPIRED' || isQuoteExpired) {
+    if (quote?.status === PaymentStatus.EXPIRED || isQuoteExpired) {
       router.replace(`/payin/${uuid}/expired`);
-    } else if (quote?.quoteStatus === 'ACCEPTED') {
+    } else if (quote?.quoteStatus === QuoteStatus.ACCEPTED) {
       router.replace(`/payin/${uuid}/pay`);
     }
   }, [quote?.status, quote?.quoteStatus, isQuoteExpired, router, uuid]);
@@ -78,9 +79,9 @@ export default function AcceptQuotePage() {
 
   if (
     isLoading ||
-    quote?.status === 'EXPIRED' ||
+    quote?.status === PaymentStatus.EXPIRED ||
     isQuoteExpired ||
-    quote?.quoteStatus === 'ACCEPTED'
+    quote?.quoteStatus === QuoteStatus.ACCEPTED
   ) {
     return <LoadingSpinner />;
   }
