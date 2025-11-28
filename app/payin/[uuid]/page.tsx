@@ -90,27 +90,27 @@ export default function AcceptQuotePage() {
       className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
       style={{ backgroundColor: '#EBEDF3' }}
     >
-      <Card className="w-full max-w-md" contentClassName="py-[25px] px-[22px]">
-        <div className="flex flex-col items-center text-center space-y-6 pt-4">
+      <Card className="w-full max-w-md px-[22px]">
+        <div className="flex flex-col items-center text-center space-y-6">
           {/* Merchant Name */}
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-medium mb-1 text-bvnk-black">
             {quote.merchantDisplayName}
           </h2>
 
           {/* Amount */}
-          <div className="flex items-baseline justify-center gap-1">
-            <span className="text-4xl font-bold text-gray-900">
+          <div className="flex items-baseline justify-center gap-1 mb-[25px] text-bvnk-black">
+            <span className="text-[32px] leading-[40px] font-semibold">
               {quote.displayCurrency.amount.toFixed(2)}
             </span>
-            <span className="text-xl font-medium text-gray-500">
+            <span className="text-xl leading-[40px] font-semibold">
               {quote.displayCurrency.currency}
             </span>
           </div>
 
           {/* Reference */}
-          <p className="text-sm text-gray-500">
+          <p className="text-sm leading-[22px] text-bvnk-gray mb-[25px]">
             For reference number:
-            <span className="ml-1 font-mono text-gray-700">
+            <span className="ml-1 font-medium leading-[22px] text-bvnk-black">
               {quote.reference}
             </span>
           </p>

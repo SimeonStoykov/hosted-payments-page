@@ -35,7 +35,7 @@ export default function ExpiredPage() {
       className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
       style={{ backgroundColor: '#EBEDF3' }}
     >
-      <Card className="w-full max-w-md text-center py-12">
+      <Card className="w-full max-w-md text-center px-[66px] pt-[77px] pb-[67px]">
         <Image
           src="/icons/error.svg"
           alt="Payment details expired error"
@@ -43,10 +43,10 @@ export default function ExpiredPage() {
           height={48}
           className="mx-auto mb-5"
         />
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-xl font-semibold mb-5 text-bvnk-black">
           Payment details expired
         </h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-[15px] leading-[24px] text-bvnk-gray">
           The payment details for your transaction have expired.
         </p>
       </Card>

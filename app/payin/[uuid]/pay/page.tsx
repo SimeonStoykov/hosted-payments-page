@@ -53,7 +53,7 @@ export default function PayQuotePage() {
         <div className="space-y-6">
           {/* Pay with Currency */}
           <div className="text-center">
-            <p className="text-xl" style={{ color: '#0A1628' }}>
+            <p className="text-xl text-bvnk-black">
               Pay with {quote.paidCurrency.currency}
             </p>
           </div>
