@@ -1,10 +1,6 @@
 'use client';
 
-const CURRENCIES = [
-  { code: 'BTC', name: 'Bitcoin' },
-  { code: 'ETH', name: 'Ethereum' },
-  { code: 'LTC', name: 'Litecoin' },
-] as const;
+import { CURRENCIES } from '../lib/constants';
 
 export type CurrencyCode = (typeof CURRENCIES)[number]['code'];
 

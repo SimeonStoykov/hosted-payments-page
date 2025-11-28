@@ -11,7 +11,7 @@ import {
   ApiErrorResponse,
   isAcceptQuoteExpiredError,
 } from '../utils/errors';
-import { PaymentErrorCode } from '../lib/constants';
+import { PaymentErrorCode, QUOTE_STALE_TIME } from '../lib/constants';
 
 export const QUOTE_QUERY_KEY = (uuid: string) => ['quote', uuid];
 
@@ -23,7 +23,7 @@ export function useQuoteSummary(uuid: string) {
     queryKey: QUOTE_QUERY_KEY(uuid),
     queryFn: () => fetchQuoteSummary(uuid),
     enabled: Boolean(uuid),
-    staleTime: 10000, // 10 seconds
+    staleTime: QUOTE_STALE_TIME,
   });
 }
 

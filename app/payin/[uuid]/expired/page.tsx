@@ -7,6 +7,7 @@ import { PaymentPageLayout } from '../../../components/PaymentPageLayout';
 import { useQuoteSummary } from '../../../hooks/useQuote';
 import { useCountdown } from '../../../hooks/useCountdown';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { PaymentStatus, QuoteStatus } from '../../../lib/constants';
 
 export default function ExpiredPage() {
   const params = useParams();
@@ -17,9 +18,14 @@ export default function ExpiredPage() {
   const { isExpired } = useCountdown(quote?.expiryDate);
 
   useEffect(() => {
-    if (!isLoading && quote && quote.status !== 'EXPIRED' && !isExpired) {
+    if (
+      !isLoading &&
+      quote &&
+      quote.status !== PaymentStatus.EXPIRED &&
+      !isExpired
+    ) {
       // If quote is accepted, go to pay, otherwise go to accept page
-      if (quote.quoteStatus === 'ACCEPTED') {
+      if (quote.quoteStatus === QuoteStatus.ACCEPTED) {
         router.replace(`/payin/${uuid}/pay`);
       } else {
         router.replace(`/payin/${uuid}`);
@@ -27,7 +33,7 @@ export default function ExpiredPage() {
     }
   }, [quote, isLoading, router, uuid, isExpired]);
 
-  if (isLoading || (quote?.status !== 'EXPIRED' && !isExpired)) {
+  if (isLoading || (quote?.status !== PaymentStatus.EXPIRED && !isExpired)) {
     return <LoadingSpinner />;
   }
   return (
