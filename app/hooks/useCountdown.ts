@@ -10,7 +10,10 @@ export function useCountdown(
   expiryTimestamp?: Quote['acceptanceExpiryDate'],
 ): CountdownResult {
   const [timeLeft, setTimeLeft] = useState<string>('');
-  const [isExpired, setIsExpired] = useState<boolean>(false);
+  const [isExpired, setIsExpired] = useState<boolean>(() => {
+    if (!expiryTimestamp) return false;
+    return Date.now() >= expiryTimestamp;
+  });
 
   useLayoutEffect(() => {
     if (!expiryTimestamp) {

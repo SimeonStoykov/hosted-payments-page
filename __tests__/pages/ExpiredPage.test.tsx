@@ -14,6 +14,12 @@ jest.mock('../../app/hooks/useQuote', () => ({
   useQuoteSummary: () => mockUseQuoteSummary(),
 }));
 
+// Mock useCountdown hook
+const mockUseCountdown = jest.fn();
+jest.mock('../../app/hooks/useCountdown', () => ({
+  useCountdown: () => mockUseCountdown(),
+}));
+
 // Mock Image component
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -26,6 +32,11 @@ jest.mock('next/image', () => ({
 describe('ExpiredPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // By default, mock timers as not expired
+    mockUseCountdown.mockReturnValue({
+      timeLeft: '01:00',
+      isExpired: false,
+    });
   });
 
   it('renders loading spinner when loading', () => {
@@ -50,7 +61,7 @@ describe('ExpiredPage', () => {
     expect(mockReplace).not.toHaveBeenCalled();
   });
 
-  it('redirects to Pay page when the quote is accepted', async () => {
+  it("redirects to Pay page when the quote is accepted and expiry date hasn't passed yet", async () => {
     mockUseQuoteSummary.mockReturnValue({
       data: { status: 'PENDING', quoteStatus: 'ACCEPTED' },
       isLoading: false,
@@ -68,7 +79,7 @@ describe('ExpiredPage', () => {
     });
   });
 
-  it('redirects to Accept page when the quote is not accepted', async () => {
+  it("redirects to Accept page when the quote is not accepted and expiry date hasn't passed yet", async () => {
     mockUseQuoteSummary.mockReturnValue({
       data: { status: 'PENDING', quoteStatus: 'TEMPLATE' },
       isLoading: false,
@@ -84,5 +95,22 @@ describe('ExpiredPage', () => {
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith('/payin/test-uuid');
     });
+  });
+
+  it('shows expired message when expiry date has passed but backend status not yet updated', () => {
+    mockUseQuoteSummary.mockReturnValue({
+      data: { status: 'PENDING', quoteStatus: 'ACCEPTED' },
+      isLoading: false,
+    });
+    mockUseCountdown.mockReturnValue({
+      timeLeft: '00:00',
+      isExpired: true,
+    });
+
+    render(<ExpiredPage />);
+
+    // Should show expired content
+    expect(screen.getByText('Payment details expired')).toBeInTheDocument();
+    expect(mockReplace).not.toHaveBeenCalled();
   });
 });

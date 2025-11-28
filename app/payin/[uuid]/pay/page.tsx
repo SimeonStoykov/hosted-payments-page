@@ -22,9 +22,9 @@ export default function PayQuotePage() {
   // Handle expiration redirect
   useEffect(() => {
     if (quote?.status === 'EXPIRED' || isExpired) {
-      router.push(`/payin/${uuid}/expired`);
+      router.replace(`/payin/${uuid}/expired`);
     }
-  }, [quote, isExpired, router, uuid]);
+  }, [isExpired, router, uuid, quote?.status]);
 
   const handleCopy = async (text: string, field: string) => {
     try {

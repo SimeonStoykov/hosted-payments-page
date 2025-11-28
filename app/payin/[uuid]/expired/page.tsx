@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Card } from '../../../components/ui/Card';
 import { useQuoteSummary } from '../../../hooks/useQuote';
+import { useCountdown } from '../../../hooks/useCountdown';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 export default function ExpiredPage() {
@@ -13,9 +14,10 @@ export default function ExpiredPage() {
   const uuid = params.uuid as string;
 
   const { data: quote, isLoading } = useQuoteSummary(uuid);
+  const { isExpired } = useCountdown(quote?.expiryDate);
 
   useEffect(() => {
-    if (!isLoading && quote && quote.status !== 'EXPIRED') {
+    if (!isLoading && quote && quote.status !== 'EXPIRED' && !isExpired) {
       // If quote is accepted, go to pay, otherwise go to accept page
       if (quote.quoteStatus === 'ACCEPTED') {
         router.replace(`/payin/${uuid}/pay`);
@@ -23,9 +25,9 @@ export default function ExpiredPage() {
         router.replace(`/payin/${uuid}`);
       }
     }
-  }, [quote, isLoading, router, uuid]);
+  }, [quote, isLoading, router, uuid, isExpired]);
 
-  if (isLoading || quote?.status !== 'EXPIRED') {
+  if (isLoading || (quote?.status !== 'EXPIRED' && !isExpired)) {
     return <LoadingSpinner />;
   }
   return (

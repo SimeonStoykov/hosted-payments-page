@@ -38,7 +38,7 @@ export default function AcceptQuotePage() {
     } else if (quote?.quoteStatus === 'ACCEPTED') {
       router.replace(`/payin/${uuid}/pay`);
     }
-  }, [quote, router, uuid]);
+  }, [quote?.status, quote?.quoteStatus, router, uuid]);
 
   // Auto-refresh when timer expires by calling update currency mutation
   useEffect(() => {
