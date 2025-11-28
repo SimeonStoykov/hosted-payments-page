@@ -29,11 +29,13 @@ export function useCountdown(
         return;
       }
 
-      const minutes = Math.floor((difference / 1000 / 60) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
+      const totalSeconds = Math.floor(difference / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
 
       setTimeLeft(
-        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
       );
       setIsExpired(false);
     };

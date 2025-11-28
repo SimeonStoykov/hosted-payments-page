@@ -86,19 +86,16 @@ export default function AcceptQuotePage() {
   }
 
   return (
-    <div
-      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
-      style={{ backgroundColor: '#EBEDF3' }}
-    >
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <Card className="w-full max-w-md px-[22px]">
         <div className="flex flex-col items-center text-center space-y-6">
           {/* Merchant Name */}
-          <h2 className="text-xl font-medium mb-1 text-bvnk-black">
+          <h2 className="text-xl font-medium mb-1">
             {quote.merchantDisplayName}
           </h2>
 
           {/* Amount */}
-          <div className="flex items-baseline justify-center gap-1 mb-[25px] text-bvnk-black">
+          <div className="flex items-baseline justify-center gap-1 mb-[25px]">
             <span className="text-[32px] leading-[40px] font-semibold">
               {quote.displayCurrency.amount.toFixed(2)}
             </span>
@@ -110,7 +107,7 @@ export default function AcceptQuotePage() {
           {/* Reference */}
           <p className="text-sm leading-[22px] text-bvnk-gray mb-[25px]">
             For reference number:
-            <span className="ml-1 font-medium leading-[22px] text-bvnk-black">
+            <span className="ml-1 font-medium leading-[22px] text-foreground">
               {quote.reference}
             </span>
           </p>
@@ -122,34 +119,31 @@ export default function AcceptQuotePage() {
 
           {/* Payment Details - Show only when currency is selected */}
           {selectedCurrency && (
-            <div className="w-full space-y-4 pt-2 border-t border-gray-200">
+            <div className="w-full space-y-4 border-t border-gray-200">
               {/* Amount Due */}
-              <div className="text-left">
-                <p className="text-sm font-medium text-gray-700 min-h-8 flex items-center justify-between">
-                  <span>Amount due</span>
+              <div className="text-left py-3 border-b border-gray-200 mb-0">
+                <p className="text-sm font-medium min-h-8 flex items-center justify-between leading-[22px]">
+                  <span className="text-bvnk-gray">Amount due</span>
                   {updateCurrencyMutation.isPending ? (
                     <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></span>
                   ) : (
-                    <span className="text-2xl font-bold text-gray-900">
-                      {quote.paidCurrency.amount}{' '}
-                      <span className="text-lg font-medium text-gray-500">
-                        {quote.paidCurrency.currency}
-                      </span>
+                    <span className="font-medium">
+                      {quote.paidCurrency.amount} {quote.paidCurrency.currency}
                     </span>
                   )}
                 </p>
               </div>
 
               {/* Quote Expiration Timer */}
-              <div className="text-left">
-                <p className="text-sm font-medium text-gray-700 min-h-8 flex items-center justify-between">
-                  <span>Quoted price expires in</span>
+              <div className="text-left py-3 border-b border-gray-200 mb-[25px]">
+                <p className="text-sm font-medium min-h-8 flex items-center justify-between leading-[22px]">
+                  <span className="text-bvnk-gray">
+                    Quoted price expires in
+                  </span>
                   {updateCurrencyMutation.isPending ? (
                     <span className="inline-block animate-spin h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></span>
                   ) : quote.acceptanceExpiryDate && !isExpired ? (
-                    <span className="text-2xl font-bold text-red-600 font-mono">
-                      {timeLeft}
-                    </span>
+                    <span className="font-medium tabular-nums">{timeLeft}</span>
                   ) : null}
                 </p>
               </div>
@@ -159,7 +153,7 @@ export default function AcceptQuotePage() {
                 type="button"
                 onClick={handleConfirm}
                 disabled={updateCurrencyMutation.isPending || isAcceptingQuote}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+                className="w-full bg-blue-600 hover:bg-blue-700 leading-[24px] text-white text-sm font-medium py-2 px-4 rounded-sm transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
               >
                 {isAcceptingQuote ? 'Processing...' : 'Confirm'}
               </button>

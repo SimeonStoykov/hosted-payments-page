@@ -18,7 +18,7 @@ export function CurrencySelector({
   onCurrencyChange,
 }: CurrencySelectorProps) {
   return (
-    <div className="w-full space-y-2 text-left">
+    <div className="w-full space-y-2 text-left mb-[25px]">
       <label
         htmlFor="currency-select"
         className="block text-sm font-medium text-bvnk-black mb-1"
@@ -29,7 +29,7 @@ export function CurrencySelector({
         id="currency-select"
         value={selectedCurrency}
         onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
-        className="w-full bg-white border border-gray-300 rounded-lg py-3 pl-4 pr-10 text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm shadow-sm hover:border-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-white font-medium border border-[#E3E8EE] rounded-sm p-4 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
       >
         <option value="" disabled>
           Select Currency

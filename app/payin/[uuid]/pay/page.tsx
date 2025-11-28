@@ -45,10 +45,7 @@ export default function PayQuotePage() {
   }
 
   return (
-    <div
-      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center"
-      style={{ backgroundColor: '#EBEDF3' }}
-    >
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <Card className="w-full max-w-md">
         <div className="space-y-6">
           {/* Pay with Currency */}
@@ -125,7 +122,7 @@ export default function PayQuotePage() {
           {/* Timer */}
           <div className="text-center pt-4 border-t border-gray-200">
             <div className="text-sm text-gray-500 mb-1">Time left to pay</div>
-            <div className="text-3xl font-bold font-mono text-gray-900 tracking-wider">
+            <div className="text-3xl font-bold text-gray-900 tracking-wider tabular-nums">
               {timeLeft}
             </div>
           </div>
