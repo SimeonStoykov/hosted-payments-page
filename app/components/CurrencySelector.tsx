@@ -25,7 +25,7 @@ export function CurrencySelector({
         id="currency-select"
         value={selectedCurrency}
         onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
-        className="w-full bg-white font-medium border border-[#E3E8EE] rounded-sm p-4 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
+        className="w-full bg-white font-medium border border-bvnk-line-gray rounded-sm p-4 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors"
       >
         <option value="" disabled>
           Select Currency

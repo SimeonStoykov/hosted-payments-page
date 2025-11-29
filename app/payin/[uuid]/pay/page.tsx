@@ -61,7 +61,8 @@ export default function PayQuotePage() {
         </p>
 
         {/* Amount Due */}
-        <div className="flex justify-between items-center py-3 mb-0">
+        {/* Amount Due */}
+        <div className="flex justify-between items-center py-3 mb-0 border-y border-bvnk-line-gray">
           <span className="text-sm text-bvnk-gray leading-[22px]">
             Amount due
           </span>
@@ -111,11 +112,13 @@ export default function PayQuotePage() {
         </div>
 
         {/* Timer */}
-        <div className="text-center pt-4 border-t border-gray-200">
-          <div className="text-sm text-gray-500 mb-1">Time left to pay</div>
-          <div className="text-3xl font-bold text-gray-900 tracking-wider tabular-nums">
+        <div className="flex justify-between items-center py-3 border-y border-bvnk-line-gray">
+          <span className="text-sm text-bvnk-gray leading-[22px]">
+            Time left to pay
+          </span>
+          <span className="font-medium text-sm leading-[22px] tabular-nums">
             {timeLeft}
-          </div>
+          </span>
         </div>
       </div>
     </PaymentPageLayout>
