@@ -6,12 +6,9 @@ import {
   acceptQuote,
 } from '../lib/api';
 
-import {
-  ApiError,
-  ApiErrorResponse,
-  isAcceptQuoteExpiredError,
-} from '../utils/errors';
+import { ApiErrorResponse, isAcceptQuoteExpiredError } from '../utils/errors';
 import { PaymentErrorCode, QUOTE_STALE_TIME } from '../lib/constants';
+import { ApiError } from '../utils/api-error';
 
 export const QUOTE_QUERY_KEY = (uuid: string) => ['quote', uuid];
 
@@ -41,18 +38,13 @@ export function useUpdateQuoteCurrency(uuid: string) {
       queryClient.setQueryData(QUOTE_QUERY_KEY(uuid), data);
     },
     onError: (error: ApiError) => {
-      // Check if the error is due to expired payment
       try {
-        const message = error?.message || '';
-        const jsonMatch = message.match(/\{.*\}/);
-        if (jsonMatch) {
-          const errorData: ApiErrorResponse = JSON.parse(jsonMatch[0]);
-          if (errorData.code === PaymentErrorCode.QUOTE_EXPIRED_UPDATE) {
-            router.replace(`/payin/${uuid}/expired`);
-          }
+        const errorData = error.data as ApiErrorResponse;
+        if (errorData?.code === PaymentErrorCode.QUOTE_EXPIRED_UPDATE) {
+          router.replace(`/payin/${uuid}/expired`);
         }
       } catch {
-        // Ignore parsing errors
+        // Ignore errors
       }
     },
   });

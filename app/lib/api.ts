@@ -1,3 +1,5 @@
+import { ApiError, ApiErrorData } from '../utils/api-error';
+
 export interface CurrencyOption {
   code: string;
   protocols: string[];
@@ -68,10 +70,14 @@ if (!API_URL) {
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(
-      `API Error: ${response.status} ${response.statusText} - ${error}`,
-    );
+    const errorText = await response.text();
+    let errorData: ApiErrorData;
+    try {
+      errorData = JSON.parse(errorText);
+    } catch {
+      errorData = { message: errorText };
+    }
+    throw new ApiError(errorData);
   }
   return response.json();
 }
