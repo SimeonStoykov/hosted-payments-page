@@ -26,7 +26,17 @@ Start the development server:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+### Usage
+
+1. **Generate a Quote UUID**:
+   Create a payment summary via the BVNK Sandbox API:
+   `POST https://api.sandbox.bvnk.com/api/v1/pay/summary`
+
+   Copy the `uuid` from the response.
+
+2. **Navigate to the Payment Page**:
+   The application root (`/`) is empty. You must navigate directly to the payment page:
+   `http://localhost:3000/payin/<UUID>`
 
 ### Running Tests
 
