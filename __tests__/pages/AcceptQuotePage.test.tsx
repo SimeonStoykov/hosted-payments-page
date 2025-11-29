@@ -54,23 +54,25 @@ describe('AcceptQuotePage', () => {
     jest.clearAllMocks();
 
     mockUseParams.mockReturnValue({ uuid: 'test-uuid' });
-    mockUseRouter.mockReturnValue({ replace: mockReplace } as any);
+    mockUseRouter.mockReturnValue({
+      replace: mockReplace,
+    } as unknown as ReturnType<typeof useRouter>);
 
     mockUseQuoteSummary.mockReturnValue({
       data: mockQuote,
       isLoading: false,
       error: null,
-    } as any);
+    } as unknown as ReturnType<typeof useQuoteSummary>);
 
     mockUseUpdateQuoteCurrency.mockReturnValue({
       mutate: mockMutate,
       isPending: false,
-    } as any);
+    } as unknown as ReturnType<typeof useUpdateQuoteCurrency>);
 
     mockUseAcceptQuote.mockReturnValue({
       mutate: mockAcceptMutate,
       isPending: false,
-    } as any);
+    } as unknown as ReturnType<typeof useAcceptQuote>);
 
     mockUseCountdown.mockReturnValue({
       timeLeft: '00:05:00',
@@ -83,7 +85,7 @@ describe('AcceptQuotePage', () => {
       data: undefined,
       isLoading: true,
       error: null,
-    } as any);
+    } as unknown as ReturnType<typeof useQuoteSummary>);
 
     const { container } = render(<AcceptQuotePage />);
     const spinner = container.querySelector('.animate-spin');
@@ -95,7 +97,7 @@ describe('AcceptQuotePage', () => {
       data: undefined,
       isLoading: false,
       error: new Error('Failed to load'),
-    } as any);
+    } as unknown as ReturnType<typeof useQuoteSummary>);
 
     render(<AcceptQuotePage />);
     expect(
@@ -117,7 +119,7 @@ describe('AcceptQuotePage', () => {
       data: { ...mockQuote, status: 'EXPIRED' },
       isLoading: false,
       error: null,
-    } as any);
+    } as unknown as ReturnType<typeof useQuoteSummary>);
 
     render(<AcceptQuotePage />);
     expect(mockReplace).toHaveBeenCalledWith('/payin/test-uuid/expired');
@@ -128,7 +130,7 @@ describe('AcceptQuotePage', () => {
       data: { ...mockQuote, quoteStatus: 'ACCEPTED' },
       isLoading: false,
       error: null,
-    } as any);
+    } as unknown as ReturnType<typeof useQuoteSummary>);
 
     render(<AcceptQuotePage />);
     expect(mockReplace).toHaveBeenCalledWith('/payin/test-uuid/pay');
@@ -163,7 +165,7 @@ describe('AcceptQuotePage', () => {
     mockUseUpdateQuoteCurrency.mockReturnValue({
       mutate: mockMutate,
       isPending: true,
-    } as any);
+    } as unknown as ReturnType<typeof useUpdateQuoteCurrency>);
 
     render(<AcceptQuotePage />);
 
