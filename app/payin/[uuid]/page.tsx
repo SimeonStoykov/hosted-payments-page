@@ -123,9 +123,9 @@ export default function AcceptQuotePage() {
 
         {/* Payment Details - Show only when currency is selected */}
         {selectedCurrency && (
-          <div className="w-full space-y-4 border-t border-gray-200">
+          <div className="w-full space-y-4 border-t border-bvnk-line-gray">
             {/* Amount Due */}
-            <div className="text-left py-3 border-b border-gray-200 mb-0">
+            <div className="text-left py-3 border-b border-bvnk-line-gray mb-0">
               <p className="text-sm font-medium min-h-8 flex items-center justify-between leading-[22px]">
                 <span className="text-bvnk-gray">Amount due</span>
                 {updateCurrencyMutation.isPending ? (
@@ -139,7 +139,7 @@ export default function AcceptQuotePage() {
             </div>
 
             {/* Quote Expiration Timer */}
-            <div className="text-left py-3 border-b border-gray-200 mb-[25px]">
+            <div className="text-left py-3 border-b border-bvnk-line-gray mb-[25px]">
               <p className="text-sm font-medium min-h-8 flex items-center justify-between leading-[22px]">
                 <span className="text-bvnk-gray">Quoted price expires in</span>
                 {updateCurrencyMutation.isPending ? (

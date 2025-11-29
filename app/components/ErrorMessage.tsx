@@ -5,7 +5,7 @@ interface ErrorMessageProps {
 }
 
 export function ErrorMessage({
-  backgroundColor = '#EBEDF3',
+  backgroundColor,
   title = 'Error',
   message,
 }: ErrorMessageProps) {
@@ -15,8 +15,8 @@ export function ErrorMessage({
       style={{ backgroundColor }}
     >
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
-        <p className="text-gray-600">{message}</p>
+        <h1 className="text-2xl font-bold">{title}</h1>
+        <p className="text-bvnk-gray">{message}</p>
       </div>
     </div>
   );

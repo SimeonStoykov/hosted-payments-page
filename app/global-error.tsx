@@ -16,7 +16,7 @@ export default function GlobalError({
   return (
     <html>
       <body>
-        <div className="min-h-screen flex items-center justify-center bg-[#EBEDF3] px-4">
+        <div className="min-h-screen flex items-center justify-center px-4">
           <div className="w-full max-w-md bg-white p-[25px] rounded-[10px] text-center">
             <div className="mb-5">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -37,7 +37,7 @@ export default function GlobalError({
               <h1 className="text-xl font-semibold mb-3">
                 Something went wrong
               </h1>
-              <p className="text-sm text-gray-600 leading-[22px] mb-5">
+              <p className="text-sm text-bvnk-gray leading-[22px] mb-5">
                 A critical error occurred. Please refresh the page.
               </p>
             </div>
