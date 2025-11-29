@@ -8,9 +8,9 @@ A Hosted Payments Page application built with Next.js, TypeScript, and Tailwind 
 
 1. Install dependencies:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 ### Running the Application
 
