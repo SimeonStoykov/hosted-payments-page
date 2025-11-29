@@ -4,9 +4,15 @@ A Hosted Payments Page application built with Next.js, TypeScript, and Tailwind 
 
 ## Getting Started
 
-### Installation
+### Environment Setup
 
-1. Install dependencies:
+Create a `.env.local` file in the root directory with the following variable:
+
+```env
+NEXT_PUBLIC_API_URL=https://api.sandbox.bvnk.com/api/v1
+```
+
+### Installation
 
 ```bash
 npm install
@@ -14,13 +20,33 @@ npm install
 
 ### Running the Application
 
-Run the development server:
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Running Tests
+
+Run all tests:
+
+```bash
+npm test
+```
+
+Run tests in watch mode:
+
+```bash
+npm test -- --watch
+```
+
+Run a specific test file:
+
+```bash
+npm test -- AcceptQuotePage.test.tsx
+```
 
 ### Application Routes
 
