@@ -9,6 +9,7 @@ import { PaymentPageLayout } from '../../../components/PaymentPageLayout';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ErrorMessage } from '../../../components/ErrorMessage';
 import { PaymentStatus } from '../../../lib/constants';
+import { getExpiredPageUrl } from '../../../utils/routes';
 import { CopyButton } from '../../../components/CopyButton';
 
 export default function PayQuotePage() {
@@ -24,7 +25,7 @@ export default function PayQuotePage() {
   // Handle expiration redirect
   useEffect(() => {
     if (quote?.status === PaymentStatus.EXPIRED || isExpired) {
-      router.replace(`/payin/${uuid}/expired`);
+      router.replace(getExpiredPageUrl(uuid));
     }
   }, [isExpired, router, uuid, quote?.status]);
 

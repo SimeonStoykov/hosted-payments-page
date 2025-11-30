@@ -8,6 +8,7 @@ import { useQuoteSummary } from '../../../hooks/useQuote';
 import { useCountdown } from '../../../hooks/useCountdown';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { PaymentStatus, QuoteStatus } from '../../../lib/constants';
+import { getPayPageUrl, getQuotePageUrl } from '../../../utils/routes';
 
 export default function ExpiredPage() {
   const params = useParams();
@@ -26,9 +27,9 @@ export default function ExpiredPage() {
     ) {
       // If quote is accepted, go to pay, otherwise go to accept page
       if (quote.quoteStatus === QuoteStatus.ACCEPTED) {
-        router.replace(`/payin/${uuid}/pay`);
+        router.replace(getPayPageUrl(uuid));
       } else {
-        router.replace(`/payin/${uuid}`);
+        router.replace(getQuotePageUrl(uuid));
       }
     }
   }, [quote, isLoading, router, uuid, isExpired]);

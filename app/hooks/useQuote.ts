@@ -9,6 +9,7 @@ import {
 
 import { ApiErrorResponse, isAcceptQuoteExpiredError } from '../utils/errors';
 import { PaymentErrorCode, QUOTE_STALE_TIME } from '../lib/constants';
+import { getExpiredPageUrl, getPayPageUrl } from '../utils/routes';
 import { ApiError } from '../utils/api-error';
 
 export const QUOTE_QUERY_KEY = (uuid: string) => ['quote', uuid];
@@ -42,11 +43,11 @@ export function useUpdateQuoteCurrency(uuid: string) {
       const errorData = error.data as ApiErrorResponse;
 
       if (errorData?.code === PaymentErrorCode.QUOTE_EXPIRED_UPDATE) {
-        router.replace(`/payin/${uuid}/expired`);
+        router.replace(getExpiredPageUrl(uuid));
       } else if (errorData?.code === PaymentErrorCode.QUOTE_ALREADY_ACCEPTED) {
         queryClient.resetQueries({ queryKey: QUOTE_QUERY_KEY(uuid) });
         toast.info('Quote already accepted. Redirecting to payment...');
-        router.replace(`/payin/${uuid}/pay`);
+        router.replace(getPayPageUrl(uuid));
       } else {
         // Show toast for non-expired errors
         toast.error(
@@ -74,11 +75,11 @@ export function useAcceptQuote(uuid: string) {
       const errorData = error.data as ApiErrorResponse;
 
       if (isAcceptQuoteExpiredError(error)) {
-        router.replace(`/payin/${uuid}/expired`);
+        router.replace(getExpiredPageUrl(uuid));
       } else if (errorData.code === PaymentErrorCode.QUOTE_ALREADY_ACCEPTED) {
         queryClient.resetQueries({ queryKey: QUOTE_QUERY_KEY(uuid) });
         toast.info('Quote already accepted. Redirecting to payment...');
-        router.replace(`/payin/${uuid}/pay`);
+        router.replace(getPayPageUrl(uuid));
       } else {
         toast.error(
           errorData.message || 'Failed to accept quote. Please try again.',

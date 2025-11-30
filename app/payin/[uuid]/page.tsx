@@ -17,6 +17,7 @@ import {
   CurrencyCode,
 } from '../../components/CurrencySelector';
 import { QuoteStatus, PaymentStatus } from '../../lib/constants';
+import { getExpiredPageUrl, getPayPageUrl } from '../../utils/routes';
 
 export default function AcceptQuotePage() {
   const params = useParams();
@@ -39,9 +40,9 @@ export default function AcceptQuotePage() {
   // Redirect based on quote status or expiry
   useEffect(() => {
     if (quote?.status === PaymentStatus.EXPIRED || isQuoteExpired) {
-      router.replace(`/payin/${uuid}/expired`);
+      router.replace(getExpiredPageUrl(uuid));
     } else if (quote?.quoteStatus === QuoteStatus.ACCEPTED) {
-      router.replace(`/payin/${uuid}/pay`);
+      router.replace(getPayPageUrl(uuid));
     }
   }, [quote?.status, quote?.quoteStatus, isQuoteExpired, router, uuid]);
 
@@ -65,7 +66,7 @@ export default function AcceptQuotePage() {
     setIsAcceptingQuote(true);
     acceptQuoteMutation.mutate(undefined, {
       onSuccess: () => {
-        router.replace(`/payin/${uuid}/pay`);
+        router.replace(getPayPageUrl(uuid));
       },
       onError: (error) => {
         // If error is NOT expired, stop processing state (button re-enables)
