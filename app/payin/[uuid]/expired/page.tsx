@@ -7,6 +7,7 @@ import { PaymentPageLayout } from '../../../components/PaymentPageLayout';
 import { useQuoteSummary } from '../../../hooks/useQuote';
 import { useCountdown } from '../../../hooks/useCountdown';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { ErrorMessage } from '../../../components/ErrorMessage';
 import { PaymentStatus, QuoteStatus } from '../../../lib/constants';
 import { getPayPageUrl, getQuotePageUrl } from '../../../utils/routes';
 
@@ -15,7 +16,7 @@ export default function ExpiredPage() {
   const router = useRouter();
   const uuid = params.uuid as string;
 
-  const { data: quote, isLoading } = useQuoteSummary(uuid);
+  const { data: quote, isLoading, error } = useQuoteSummary(uuid);
   const { isExpired } = useCountdown(quote?.expiryDate);
 
   useEffect(() => {
@@ -34,9 +35,17 @@ export default function ExpiredPage() {
     }
   }, [quote, isLoading, router, uuid, isExpired]);
 
-  if (isLoading || (quote?.status !== PaymentStatus.EXPIRED && !isExpired)) {
+  if (
+    isLoading ||
+    (quote && quote.status !== PaymentStatus.EXPIRED && !isExpired)
+  ) {
     return <LoadingSpinner />;
   }
+
+  if (error || !quote) {
+    return <ErrorMessage message="Failed to load quote details." />;
+  }
+
   return (
     <PaymentPageLayout contentClassName="text-center px-[66px] pt-[77px] pb-[67px]">
       <Image
