@@ -40,8 +40,13 @@ export function useUpdateQuoteCurrency(uuid: string) {
     },
     onError: (error: ApiError) => {
       const errorData = error.data as ApiErrorResponse;
+
       if (errorData?.code === PaymentErrorCode.QUOTE_EXPIRED_UPDATE) {
         router.replace(`/payin/${uuid}/expired`);
+      } else if (errorData?.code === PaymentErrorCode.QUOTE_ALREADY_ACCEPTED) {
+        queryClient.resetQueries({ queryKey: QUOTE_QUERY_KEY(uuid) });
+        toast.info('Quote already accepted. Redirecting to payment...');
+        router.replace(`/payin/${uuid}/pay`);
       } else {
         // Show toast for non-expired errors
         toast.error(
@@ -66,21 +71,18 @@ export function useAcceptQuote(uuid: string) {
       queryClient.setQueryData(QUOTE_QUERY_KEY(uuid), data);
     },
     onError: (error: ApiError) => {
+      const errorData = error.data as ApiErrorResponse;
+
       if (isAcceptQuoteExpiredError(error)) {
         router.replace(`/payin/${uuid}/expired`);
+      } else if (errorData.code === PaymentErrorCode.QUOTE_ALREADY_ACCEPTED) {
+        queryClient.resetQueries({ queryKey: QUOTE_QUERY_KEY(uuid) });
+        toast.info('Quote already accepted. Redirecting to payment...');
+        router.replace(`/payin/${uuid}/pay`);
       } else {
-        const errorData = error.data as ApiErrorResponse;
-
-        // Check if quote is already accepted - redirect to pay page
-        if (errorData.code === PaymentErrorCode.QUOTE_ALREADY_ACCEPTED) {
-          queryClient.resetQueries({ queryKey: QUOTE_QUERY_KEY(uuid) });
-          toast.info('Quote already accepted. Redirecting to payment...');
-          router.replace(`/payin/${uuid}/pay`);
-        } else {
-          toast.error(
-            errorData.message || 'Failed to accept quote. Please try again.',
-          );
-        }
+        toast.error(
+          errorData.message || 'Failed to accept quote. Please try again.',
+        );
       }
     },
   });
