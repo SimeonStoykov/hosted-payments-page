@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import {
   fetchQuoteSummary,
   updateQuoteCurrency,
@@ -38,13 +39,14 @@ export function useUpdateQuoteCurrency(uuid: string) {
       queryClient.setQueryData(QUOTE_QUERY_KEY(uuid), data);
     },
     onError: (error: ApiError) => {
-      try {
-        const errorData = error.data as ApiErrorResponse;
-        if (errorData?.code === PaymentErrorCode.QUOTE_EXPIRED_UPDATE) {
-          router.replace(`/payin/${uuid}/expired`);
-        }
-      } catch {
-        // Ignore errors
+      const errorData = error.data as ApiErrorResponse;
+      if (errorData?.code === PaymentErrorCode.QUOTE_EXPIRED_UPDATE) {
+        router.replace(`/payin/${uuid}/expired`);
+      } else {
+        // Show toast for non-expired errors
+        toast.error(
+          errorData?.message || 'Failed to update currency. Please try again.',
+        );
       }
     },
   });
@@ -64,9 +66,21 @@ export function useAcceptQuote(uuid: string) {
       queryClient.setQueryData(QUOTE_QUERY_KEY(uuid), data);
     },
     onError: (error: ApiError) => {
-      // Check if the error is due to expired payment
       if (isAcceptQuoteExpiredError(error)) {
         router.replace(`/payin/${uuid}/expired`);
+      } else {
+        const errorData = error.data as ApiErrorResponse;
+
+        // Check if quote is already accepted - redirect to pay page
+        if (errorData.code === PaymentErrorCode.QUOTE_ALREADY_ACCEPTED) {
+          queryClient.resetQueries({ queryKey: QUOTE_QUERY_KEY(uuid) });
+          toast.info('Quote already accepted. Redirecting to payment...');
+          router.replace(`/payin/${uuid}/pay`);
+        } else {
+          toast.error(
+            errorData.message || 'Failed to accept quote. Please try again.',
+          );
+        }
       }
     },
   });

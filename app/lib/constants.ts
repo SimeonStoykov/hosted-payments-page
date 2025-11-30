@@ -12,6 +12,7 @@ export enum PaymentStatus {
 export enum PaymentErrorCode {
   QUOTE_EXPIRED_UPDATE = 'MER-PAY-2017',
   QUOTE_EXPIRED_ACCEPT = 'MER-PAY-2004',
+  QUOTE_ALREADY_ACCEPTED = 'MER-PAY-2003',
 }
 
 export const CURRENCIES = [
